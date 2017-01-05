@@ -1,8 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 require('whatwg-fetch');
 
 var R = require('ramda'),
@@ -11,137 +9,7 @@ var R = require('ramda'),
     console.log(x);return x;
 };
 
-//Click Me!
-Rx.Observable.fromEvent(document.querySelectorAll('#click-me'), 'click').subscribe(function (e) {
-    return console.log('You clicked the "' + e.target.innerHTML + '" button!!');
-});
-
-//Letters
-var letterKeys = Rx.Observable.fromEvent(document, 'keypress').map(R.prop('key')).filter(R.pipe(R.match(/^[xyz]$/), R.length));
-
-Rx.Observable.fromEvent(document.querySelectorAll('.letters'), 'click').map(R.path(['target', 'innerHTML'])).merge(letterKeys).scan(R.concat, '').subscribe(function (s) {
-    return document.querySelector('#letter-screen').innerHTML = s;
-});
-
-//Calculator
-var second = function second(x, y) {
-    return y;
-};
-
-var operate = function operate(acc) {
-    return acc.operation(parseFloat(acc.prevValue), parseFloat(acc.value)) + '';
-};
-
-var operateLoadNextOperator = function operateLoadNextOperator(acc, operation) {
-    return _extends({}, acc, {
-        newNumber: true,
-        value: operate(acc),
-        operation: operation
-    });
-};
-
-var buildNumber = R.curry(function (digit, number) {
-    return digit === '.' ? number.match(/\./) ? number : number + digit : R.pipe(R.concat(number), R.replace(/^(?:0+)?(.*)/, '$1'), R.replace(/^(?:\.)+?(.*)/, '0.$1'), R.replace(/^$/, '0'))(digit);
-});
-
-var updateValue = function updateValue(button, acc) {
-    return R.pipe(function (value) {
-        return acc.newNumber ? '' : value;
-    }, buildNumber(button))(acc.value);
-};
-
-var toggleNegative = function toggleNegative(n) {
-    return n === '0' ? n : n.match(/^-.*/) ? n.replace(/^-(.*)/, '$1') : '-' + n;
-};
-
-var calculatorSeed = {
-    prevValue: '0',
-    value: '0',
-    operation: second,
-    newNumber: true
-};
-
-var calculator = function calculator(acc, button) {
-    switch (button) {
-        case '+':
-            return operateLoadNextOperator(acc, R.add);
-        case '-':
-            return operateLoadNextOperator(acc, R.subtract);
-        case '*':
-            return operateLoadNextOperator(acc, R.multiply);
-        case '/':
-            return operateLoadNextOperator(acc, R.divide);
-        case '=':
-            return operateLoadNextOperator(acc, second);
-        case 'c':
-            return calculatorSeed;
-        case 'p':
-            return _extends({}, acc, {
-                value: toggleNegative(acc.value)
-            });
-        default:
-            return _extends({}, acc, {
-                newNumber: false,
-                prevValue: acc.newNumber ? acc.value : acc.prevValue,
-                value: updateValue(button, acc)
-            });
-    }
-};
-
-var calculatorKeys = Rx.Observable.fromEvent(document, 'keypress').map(R.prop('key')).filter(R.pipe(R.match(/^[\*\/\+-\dcp=]$/), R.length));
-
-Rx.Observable.fromEvent(document.querySelectorAll('.numpad'), 'click').map(R.path(['target', 'innerHTML'])).map(function (button) {
-    return button === '+/-' ? 'p' : button;
-}).merge(calculatorKeys).scan(calculator, calculatorSeed).map(R.prop('value')).subscribe(function (n) {
-    return document.querySelector('#calc-screen').innerHTML = n;
-});
-
-//Story
-var max = 6,
-    min = 1,
-    decFloor = function decFloor(floor, x) {
-    return x - 1 < floor ? x : x - 1;
-},
-    incCeil = function incCeil(ceil, x) {
-    return x + 1 > ceil ? x : x + 1;
-},
-    buttonFunc = function buttonFunc(acc, button) {
-    switch (button) {
-        case '<<':
-            return min;
-        case '>>':
-            return max;
-        case '<':
-            return decFloor(min, acc);
-        case '>':
-            return incCeil(max, acc);
-        case '<>':
-            return min;
-        default:
-            return acc;
-    }
-};
-Rx.Observable.fromEvent(document.querySelectorAll('.story'), 'click').map(R.path(['target', 'innerText'])).scan(buttonFunc, min).startWith(min).map(function (pageNumber) {
-    return '/story/' + pageNumber;
-}).flatMap(function (url) {
-    return fetch(url);
-}).flatMap(function (response) {
-    return response.json();
-}).map(R.prop('text')).subscribe(function (text) {
-    return document.querySelector('#story-screen').innerHTML = text;
-});
-
-//map vs flatMap or chain
-
-console.log(R.map(function (x) {
-    return [x, x];
-}, [1, 2, 3]));
-// prints [ [ 1, 1 ], [ 2, 2 ], [ 3, 3 ] ]
-
-console.log(R.chain(function (x) {
-    return [x, x];
-}, [1, 2, 3]));
-// prints [ 1, 1, 2, 2, 3, 3 ]
+console.log('whattup?');
 
 },{"ramda":2,"rx":3,"whatwg-fetch":4}],2:[function(require,module,exports){
 //  Ramda v0.22.1
