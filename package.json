@@ -4,7 +4,7 @@
   "description": "repo for http://funkyjavascript.com/rxjs",
   "main": "index.js",
   "scripts": {
-    "build": "browserify front-end/js/main.js -o public/js/main.js -t [ babelify --presets [ latest ] --plugins [ transform-object-rest-spread ] ]"
+    "build": "browserify front-end/js/main.js -o public/js/main.js -t [ babelify --presets [ latest react ] --plugins [ transform-object-rest-spread ] ]"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
-    "babel-preset-latest": "^6.16.0"
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0"
   }
 }

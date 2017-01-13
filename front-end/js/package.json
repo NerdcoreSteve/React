@@ -5,6 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "ramda": "^0.22.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "rx": "^4.1.0",
     "whatwg-fetch": "^2.0.1"
   },
