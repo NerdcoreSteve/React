@@ -55,3 +55,52 @@ render()
 TODO
 Make an app that makes multiple notes
 */
+const
+    notesReducer = (state = {title: '', text: ''}, action) => {
+        switch(action.type) {
+            case 'MODIFY_TITLE':
+                return {
+                    ...state,
+                    title: action.title
+                }
+            case 'MODIFY_TEXT':
+                return {
+                    ...state,
+                    title: action.text
+                }
+            default:
+                return state
+        }
+    },
+    notesStore = createStore(notesReducer),
+    noteStyle = {
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        padding: '10px',
+        marginTop: '10px',
+    },
+    noteButtonsStyle = {
+        marginTop: '5px',
+    },
+    Note = ({title, text}) =>
+        <div style={noteStyle}>
+            <input type='text' value={title}></input>
+            <p>{text}</p>
+            <textarea rows="4" cols="50" value={text}/>
+            <div style={noteButtonsStyle}>
+                <button type="button">+</button>
+                <button type="button">-</button>
+            </div>
+        </div>,
+    notesRender = () =>
+        ReactDOM.render(
+            <div>
+                <Note
+                    title={notesStore.getState().title}
+                    text={notesStore.getState().text}
+                />
+            </div>,
+            document.getElementById('notes'))
+
+notesStore.subscribe(notesRender)
+notesRender()

@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 require('whatwg-fetch');
 
 var R = require('ramda'),
@@ -85,6 +87,75 @@ render();
 TODO
 Make an app that makes multiple notes
 */
+var notesReducer = function notesReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { title: '', text: '' };
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'MODIFY_TITLE':
+            return _extends({}, state, {
+                title: action.title
+            });
+        case 'MODIFY_TEXT':
+            return _extends({}, state, {
+                title: action.text
+            });
+        default:
+            return state;
+    }
+},
+    notesStore = createStore(notesReducer),
+    noteStyle = {
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    padding: '10px',
+    marginTop: '10px'
+},
+    noteButtonsStyle = {
+    marginTop: '5px'
+},
+    Note = function Note(_ref3) {
+    var title = _ref3.title,
+        text = _ref3.text;
+    return React.createElement(
+        'div',
+        { style: noteStyle },
+        React.createElement('input', { type: 'text', value: title }),
+        React.createElement(
+            'p',
+            null,
+            text
+        ),
+        React.createElement('textarea', { rows: '4', cols: '50', value: text }),
+        React.createElement(
+            'div',
+            { style: noteButtonsStyle },
+            React.createElement(
+                'button',
+                { type: 'button' },
+                '+'
+            ),
+            React.createElement(
+                'button',
+                { type: 'button' },
+                '-'
+            )
+        )
+    );
+},
+    notesRender = function notesRender() {
+    return ReactDOM.render(React.createElement(
+        'div',
+        null,
+        React.createElement(Note, {
+            title: notesStore.getState().title,
+            text: notesStore.getState().text
+        })
+    ), document.getElementById('notes'));
+};
+
+notesStore.subscribe(notesRender);
+notesRender();
 
 },{"ramda":36,"react":188,"react-dom":37,"redux":194,"rx":196,"whatwg-fetch":200}],2:[function(require,module,exports){
 (function (process){
