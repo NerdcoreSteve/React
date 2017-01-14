@@ -26,19 +26,30 @@ ReactDOM.render(
     </div>,
     document.getElementById('simple'))
 
-/*
-TODO
-With redux, make a text box that changes an element when you type in it
-*/
+//Simple react redux example
 const
-    {createStore} = require('redux')
+    {createStore} = require('redux'),
+    reducer = (state = '', action) => {
+        switch(action.type) {
+            case 'ADD_TEXT':
+                return action.text
+            default:
+                return state
+        }
+    },
+    store = createStore(reducer),
+    render = () =>
+        ReactDOM.render(
+            <div>
+                <p>{store.getState()}</p>
+                <input
+                    type="text"
+                    onChange={({target:{value: text}}) => store.dispatch({type: 'ADD_TEXT', text})}/>
+            </div>,
+            document.getElementById('textfield'))
 
-ReactDOM.render(
-    <div>
-        <p></p>
-        <input type="text"/>
-    </div>,
-    document.getElementById('textfield'))
+store.subscribe(render)
+render()
 
 /*
 TODO

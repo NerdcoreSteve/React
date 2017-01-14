@@ -44,20 +44,42 @@ ReactDOM.render(React.createElement(
     React.createElement(AnotherComponent, { argument: 'bananas' })
 ), document.getElementById('simple'));
 
-/*
-TODO
-With redux, make a text box that changes an element when you type in it
-*/
+//Simple react redux example
 
 var _require = require('redux'),
-    createStore = _require.createStore;
+    createStore = _require.createStore,
+    reducer = function reducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    var action = arguments[1];
 
-ReactDOM.render(React.createElement(
-    'div',
-    null,
-    React.createElement('p', null),
-    React.createElement('input', { type: 'text' })
-), document.getElementById('textfield'));
+    switch (action.type) {
+        case 'ADD_TEXT':
+            return action.text;
+        default:
+            return state;
+    }
+},
+    store = createStore(reducer),
+    render = function render() {
+    return ReactDOM.render(React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'p',
+            null,
+            store.getState()
+        ),
+        React.createElement('input', {
+            type: 'text',
+            onChange: function onChange(_ref2) {
+                var text = _ref2.target.value;
+                return store.dispatch({ type: 'ADD_TEXT', text: text });
+            } })
+    ), document.getElementById('textfield'));
+};
+
+store.subscribe(render);
+render();
 
 /*
 TODO
