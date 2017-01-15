@@ -1,8 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 require('whatwg-fetch');
 
 var R = require('ramda'),
@@ -33,9 +31,8 @@ var SomeComponent = function SomeComponent() {
     return React.createElement(
         'div',
         null,
-        '`The argument of this component is ',
-        argument,
-        '`'
+        'The argument of this component is ',
+        argument
     );
 };
 
@@ -85,77 +82,93 @@ render();
 
 /*
 TODO
-Make an app that makes multiple notes
+Make a more complicated app
+This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
-var notesReducer = function notesReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { title: '', text: '' };
+var kanbanReducer = function kanbanReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     var action = arguments[1];
 
     switch (action.type) {
-        case 'MODIFY_TITLE':
-            return _extends({}, state, {
-                title: action.title
-            });
-        case 'MODIFY_TEXT':
-            return _extends({}, state, {
-                title: action.text
-            });
+        case 'ADD_TEXT':
+            return action.text;
         default:
             return state;
     }
 },
-    notesStore = createStore(notesReducer),
-    noteStyle = {
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    padding: '10px',
+    kanbanStore = createStore(kanbanReducer),
+    kanbanStyle = {
     marginTop: '10px'
 },
-    noteButtonsStyle = {
-    marginTop: '5px'
+    colStyle = {
+    backgroundColor: '#c7ffa0',
+    padding: '5px',
+    marginLeft: '5px',
+    marginRight: '5px',
+    float: 'left',
+    borderRadius: '5px',
+    width: '200px',
+    height: '300px'
 },
-    Note = function Note(_ref3) {
+    headerStyle = {
+    backgroundColor: '#75aaff',
+    borderRadius: '5px',
+    padding: '5px',
+    marginTop: '0px',
+    textAlign: 'center'
+},
+    Item = function Item(_ref3) {
     var title = _ref3.title,
         text = _ref3.text;
     return React.createElement(
         'div',
-        { style: noteStyle },
-        React.createElement('input', { type: 'text', value: title }),
+        null,
         React.createElement(
-            'p',
+            'h3',
             null,
-            text
-        ),
-        React.createElement('textarea', { rows: '4', cols: '50', value: text }),
-        React.createElement(
-            'div',
-            { style: noteButtonsStyle },
-            React.createElement(
-                'button',
-                { type: 'button' },
-                '+'
-            ),
-            React.createElement(
-                'button',
-                { type: 'button' },
-                '-'
-            )
+            'stuff'
         )
     );
 },
-    notesRender = function notesRender() {
+    kanbanRender = function kanbanRender() {
     return ReactDOM.render(React.createElement(
         'div',
-        null,
-        React.createElement(Note, {
-            title: notesStore.getState().title,
-            text: notesStore.getState().text
-        })
-    ), document.getElementById('notes'));
+        { style: kanbanStyle },
+        React.createElement(
+            'div',
+            { style: colStyle },
+            React.createElement(
+                'h3',
+                { style: headerStyle },
+                'to do'
+            ),
+            React.createElement(Item, null)
+        ),
+        React.createElement(
+            'div',
+            { style: colStyle },
+            React.createElement(
+                'h3',
+                { style: headerStyle },
+                'doing'
+            ),
+            React.createElement(Item, null)
+        ),
+        React.createElement(
+            'div',
+            { style: colStyle },
+            React.createElement(
+                'h3',
+                { style: headerStyle },
+                'done'
+            ),
+            React.createElement(Item, null)
+        )
+    ), document.getElementById('kanban'));
 };
 
-notesStore.subscribe(notesRender);
-notesRender();
+kanbanStore.subscribe(kanbanRender);
+kanbanRender();
 
 },{"ramda":36,"react":188,"react-dom":37,"redux":194,"rx":196,"whatwg-fetch":200}],2:[function(require,module,exports){
 (function (process){

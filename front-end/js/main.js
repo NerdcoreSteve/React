@@ -17,7 +17,7 @@ const
     SomeComponent = () =>
         <div>This is a stateless functional component</div>,
     AnotherComponent = ({argument}) =>
-        <div>`The argument of this component is {argument}`</div>
+        <div>The argument of this component is {argument}</div>
 
 ReactDOM.render(
     <div>
@@ -53,54 +53,60 @@ render()
 
 /*
 TODO
-Make an app that makes multiple notes
+Make a more complicated app
+This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 const
-    notesReducer = (state = {title: '', text: ''}, action) => {
+    kanbanReducer = (state = '', action) => {
         switch(action.type) {
-            case 'MODIFY_TITLE':
-                return {
-                    ...state,
-                    title: action.title
-                }
-            case 'MODIFY_TEXT':
-                return {
-                    ...state,
-                    title: action.text
-                }
+            case 'ADD_TEXT':
+                return action.text
             default:
                 return state
         }
     },
-    notesStore = createStore(notesReducer),
-    noteStyle = {
-        borderStyle: 'solid',
-        borderWidth: '1px',
-        padding: '10px',
-        marginTop: '10px',
+    kanbanStore = createStore(kanbanReducer),
+    kanbanStyle = {
+        marginTop: '10px'
     },
-    noteButtonsStyle = {
-        marginTop: '5px',
+    colStyle = {
+        backgroundColor: '#c7ffa0',
+        padding: '5px',
+        marginLeft: '5px',
+        marginRight: '5px',
+        float: 'left',
+        borderRadius: '5px',
+        width: '200px',
+        height: '300px'
     },
-    Note = ({title, text}) =>
-        <div style={noteStyle}>
-            <input type='text' value={title}></input>
-            <p>{text}</p>
-            <textarea rows="4" cols="50" value={text}/>
-            <div style={noteButtonsStyle}>
-                <button type="button">+</button>
-                <button type="button">-</button>
-            </div>
+    headerStyle = {
+        backgroundColor: '#75aaff',
+        borderRadius: '5px',
+        padding: '5px',
+        marginTop: '0px',
+        textAlign: 'center'
+    },
+    Item = ({title, text}) =>
+        <div>
+            <h3>stuff</h3>
         </div>,
-    notesRender = () =>
+    kanbanRender = () =>
         ReactDOM.render(
-            <div>
-                <Note
-                    title={notesStore.getState().title}
-                    text={notesStore.getState().text}
-                />
+            <div style={kanbanStyle}>
+                <div style={colStyle}>
+                    <h3 style={headerStyle}>to do</h3>
+                    <Item/>
+                </div>
+                <div style={colStyle}>
+                    <h3 style={headerStyle}>doing</h3>
+                    <Item/>
+                </div>
+                <div style={colStyle}>
+                    <h3 style={headerStyle}>done</h3>
+                    <Item/>
+                </div>
             </div>,
-            document.getElementById('notes'))
+            document.getElementById('kanban'))
 
-notesStore.subscribe(notesRender)
-notesRender()
+kanbanStore.subscribe(kanbanRender)
+kanbanRender()
