@@ -86,9 +86,16 @@ const
         marginTop: '0px',
         textAlign: 'center'
     },
+    /*
+        Arrow buttons to move columns and go up and down
+        on a column. Each column has a plus button to add
+        items. Each item has a minus button to remove.
+
+    */
     Item = ({title, text}) =>
         <div>
-            <h3>stuff</h3>
+            <input type="text"/>
+            <textarea rows="4" cols="25"/>
         </div>,
     kanbanRender = () =>
         ReactDOM.render(

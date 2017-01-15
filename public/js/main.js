@@ -117,17 +117,20 @@ var kanbanReducer = function kanbanReducer() {
     marginTop: '0px',
     textAlign: 'center'
 },
-    Item = function Item(_ref3) {
+
+/*
+    Arrow buttons to move columns and go up and down
+    on a column. Each column has a plus button to add
+    items. Each item has a minus button to remove.
+ */
+Item = function Item(_ref3) {
     var title = _ref3.title,
         text = _ref3.text;
     return React.createElement(
         'div',
         null,
-        React.createElement(
-            'h3',
-            null,
-            'stuff'
-        )
+        React.createElement('input', { type: 'text' }),
+        React.createElement('textarea', { rows: '4', cols: '25' })
     );
 },
     kanbanRender = function kanbanRender() {
