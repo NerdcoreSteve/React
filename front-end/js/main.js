@@ -77,7 +77,7 @@ const
         float: 'left',
         borderRadius: '5px',
         width: '200px',
-        height: '300px'
+        height: '500px'
     },
     headerStyle = {
         backgroundColor: '#75aaff',
@@ -86,6 +86,20 @@ const
         marginTop: '0px',
         textAlign: 'center'
     },
+    itemStyle = {
+        backgroundColor: '#f4cb42',
+        borderRadius: '5px',
+        padding: '5px',
+        marginTop: '0px',
+        textAlign: 'center'
+    },
+    itemInputStyle = {
+        marginBottom: '5px',
+        borderRadius: '5px'
+    },
+    itemButtonStyle = {
+        width: '42px'
+    },
     /*
         Arrow buttons to move columns and go up and down
         on a column. Each column has a plus button to add
@@ -93,23 +107,36 @@ const
 
     */
     Item = ({title, text}) =>
-        <div>
-            <input type="text"/>
-            <textarea rows="4" cols="25"/>
+        <div style={itemStyle}>
+            <input
+                type="text"
+                cols="25"
+                style={{...itemInputStyle, width: '170px', borderStyle: 'solid'}}/>
+            <textarea rows="4" cols="25" style={{...itemInputStyle, resize: 'none'}}/>
+            <button type="button" style={{width: '170px', fontSize: '90%'}}>remove</button>
+            <br/>
+            <button type="button" style={itemButtonStyle}>▲</button>
+            <button type="button" style={itemButtonStyle}>▼</button>
+            <button type="button" style={itemButtonStyle}>◀</button>
+            <button type="button" style={itemButtonStyle}>▶</button>
         </div>,
+    addButtonStyle = {width: '200px', marginBottom: '10px'},
     kanbanRender = () =>
         ReactDOM.render(
             <div style={kanbanStyle}>
                 <div style={colStyle}>
                     <h3 style={headerStyle}>to do</h3>
+                    <button type="button" style={addButtonStyle}>+</button>
                     <Item/>
                 </div>
                 <div style={colStyle}>
                     <h3 style={headerStyle}>doing</h3>
+                    <button type="button" style={addButtonStyle}>+</button>
                     <Item/>
                 </div>
                 <div style={colStyle}>
                     <h3 style={headerStyle}>done</h3>
+                    <button type="button" style={addButtonStyle}>+</button>
                     <Item/>
                 </div>
             </div>,

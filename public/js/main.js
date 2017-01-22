@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 require('whatwg-fetch');
 
 var R = require('ramda'),
@@ -108,7 +110,7 @@ var kanbanReducer = function kanbanReducer() {
     float: 'left',
     borderRadius: '5px',
     width: '200px',
-    height: '300px'
+    height: '500px'
 },
     headerStyle = {
     backgroundColor: '#75aaff',
@@ -116,6 +118,20 @@ var kanbanReducer = function kanbanReducer() {
     padding: '5px',
     marginTop: '0px',
     textAlign: 'center'
+},
+    itemStyle = {
+    backgroundColor: '#f4cb42',
+    borderRadius: '5px',
+    padding: '5px',
+    marginTop: '0px',
+    textAlign: 'center'
+},
+    itemInputStyle = {
+    marginBottom: '5px',
+    borderRadius: '5px'
+},
+    itemButtonStyle = {
+    width: '42px'
 },
 
 /*
@@ -128,11 +144,41 @@ Item = function Item(_ref3) {
         text = _ref3.text;
     return React.createElement(
         'div',
-        null,
-        React.createElement('input', { type: 'text' }),
-        React.createElement('textarea', { rows: '4', cols: '25' })
+        { style: itemStyle },
+        React.createElement('input', {
+            type: 'text',
+            cols: '25',
+            style: _extends({}, itemInputStyle, { width: '170px', borderStyle: 'solid' }) }),
+        React.createElement('textarea', { rows: '4', cols: '25', style: _extends({}, itemInputStyle, { resize: 'none' }) }),
+        React.createElement(
+            'button',
+            { type: 'button', style: { width: '170px', fontSize: '90%' } },
+            'remove'
+        ),
+        React.createElement('br', null),
+        React.createElement(
+            'button',
+            { type: 'button', style: itemButtonStyle },
+            '\u25B2'
+        ),
+        React.createElement(
+            'button',
+            { type: 'button', style: itemButtonStyle },
+            '\u25BC'
+        ),
+        React.createElement(
+            'button',
+            { type: 'button', style: itemButtonStyle },
+            '\u25C0'
+        ),
+        React.createElement(
+            'button',
+            { type: 'button', style: itemButtonStyle },
+            '\u25B6'
+        )
     );
 },
+    addButtonStyle = { width: '200px', marginBottom: '10px' },
     kanbanRender = function kanbanRender() {
     return ReactDOM.render(React.createElement(
         'div',
@@ -145,6 +191,11 @@ Item = function Item(_ref3) {
                 { style: headerStyle },
                 'to do'
             ),
+            React.createElement(
+                'button',
+                { type: 'button', style: addButtonStyle },
+                '+'
+            ),
             React.createElement(Item, null)
         ),
         React.createElement(
@@ -155,6 +206,11 @@ Item = function Item(_ref3) {
                 { style: headerStyle },
                 'doing'
             ),
+            React.createElement(
+                'button',
+                { type: 'button', style: addButtonStyle },
+                '+'
+            ),
             React.createElement(Item, null)
         ),
         React.createElement(
@@ -164,6 +220,11 @@ Item = function Item(_ref3) {
                 'h3',
                 { style: headerStyle },
                 'done'
+            ),
+            React.createElement(
+                'button',
+                { type: 'button', style: addButtonStyle },
+                '+'
             ),
             React.createElement(Item, null)
         )
