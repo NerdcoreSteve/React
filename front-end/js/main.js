@@ -57,7 +57,7 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 const
-    kanbanReducer = (state = '', action) => {
+    kanbanReducer = (state = {columns: ['to do', 'doing', 'done']}, action) => {
         switch(action.type) {
             case 'ADD_TEXT':
                 return action.text
@@ -121,24 +121,16 @@ const
             <button type="button" style={itemButtonStyle}>▶</button>
         </div>,
     addButtonStyle = {width: '200px', marginBottom: '10px'},
+    Column = ({heading}) =>
+        <div style={colStyle}>
+            <h3 style={headerStyle}>{heading}</h3>
+            <button type="button" style={addButtonStyle}>+</button>
+            <Item/>
+        </div>,
     kanbanRender = () =>
         ReactDOM.render(
             <div style={kanbanStyle}>
-                <div style={colStyle}>
-                    <h3 style={headerStyle}>to do</h3>
-                    <button type="button" style={addButtonStyle}>+</button>
-                    <Item/>
-                </div>
-                <div style={colStyle}>
-                    <h3 style={headerStyle}>doing</h3>
-                    <button type="button" style={addButtonStyle}>+</button>
-                    <Item/>
-                </div>
-                <div style={colStyle}>
-                    <h3 style={headerStyle}>done</h3>
-                    <button type="button" style={addButtonStyle}>+</button>
-                    <Item/>
-                </div>
+                {kanbanStore.getState().columns.map(heading => <Column heading={heading}/>)}
             </div>,
             document.getElementById('kanban'))
 

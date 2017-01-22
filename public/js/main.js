@@ -88,7 +88,7 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 var kanbanReducer = function kanbanReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { columns: ['to do', 'doing', 'done'] };
     var action = arguments[1];
 
     switch (action.type) {
@@ -179,55 +179,31 @@ Item = function Item(_ref3) {
     );
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
+    Column = function Column(_ref4) {
+    var heading = _ref4.heading;
+    return React.createElement(
+        'div',
+        { style: colStyle },
+        React.createElement(
+            'h3',
+            { style: headerStyle },
+            heading
+        ),
+        React.createElement(
+            'button',
+            { type: 'button', style: addButtonStyle },
+            '+'
+        ),
+        React.createElement(Item, null)
+    );
+},
     kanbanRender = function kanbanRender() {
     return ReactDOM.render(React.createElement(
         'div',
         { style: kanbanStyle },
-        React.createElement(
-            'div',
-            { style: colStyle },
-            React.createElement(
-                'h3',
-                { style: headerStyle },
-                'to do'
-            ),
-            React.createElement(
-                'button',
-                { type: 'button', style: addButtonStyle },
-                '+'
-            ),
-            React.createElement(Item, null)
-        ),
-        React.createElement(
-            'div',
-            { style: colStyle },
-            React.createElement(
-                'h3',
-                { style: headerStyle },
-                'doing'
-            ),
-            React.createElement(
-                'button',
-                { type: 'button', style: addButtonStyle },
-                '+'
-            ),
-            React.createElement(Item, null)
-        ),
-        React.createElement(
-            'div',
-            { style: colStyle },
-            React.createElement(
-                'h3',
-                { style: headerStyle },
-                'done'
-            ),
-            React.createElement(
-                'button',
-                { type: 'button', style: addButtonStyle },
-                '+'
-            ),
-            React.createElement(Item, null)
-        )
+        kanbanStore.getState().columns.map(function (heading) {
+            return React.createElement(Column, { heading: heading });
+        })
     ), document.getElementById('kanban'));
 };
 
