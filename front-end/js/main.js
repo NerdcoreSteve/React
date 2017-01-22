@@ -57,7 +57,8 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 const
-    kanbanReducer = (state = {columns: ['to do', 'doing', 'done']}, action) => {
+    kanbanInitialState = {columns: ['to do', 'doing', 'done']},
+    kanbanReducer = (state = kanbanInitialState, action) => {
         switch(action.type) {
             case 'ADD_TEXT':
                 return action.text
