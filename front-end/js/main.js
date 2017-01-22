@@ -134,10 +134,8 @@ const
             <textarea rows="4" cols="25" style={{...itemInputStyle, resize: 'none'}}/>
             <button type="button" style={{width: '170px', fontSize: '90%'}}>remove</button>
             <br/>
-            <button type="button" style={itemButtonStyle}>▲</button>
-            <button type="button" style={itemButtonStyle}>▼</button>
-            <button type="button" style={itemButtonStyle}>◀</button>
-            <button type="button" style={itemButtonStyle}>▶</button>
+            {['▲', '▼', '◀', '▶'].map(
+                arrow => <button type="button" style={itemButtonStyle}>{arrow}</button>)}
         </div>,
     addButtonStyle = {width: '200px', marginBottom: '10px'},
     Column = ({heading, items}) =>
