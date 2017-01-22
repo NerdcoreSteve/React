@@ -57,7 +57,31 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 const
-    kanbanInitialState = {columns: ['to do', 'doing', 'done']},
+    kanbanInitialState = {
+        columns: [
+            {
+                key: 1,
+                heading: 'to do',
+                items: [
+                    {
+                        key: 1,
+                        title: 'Buy a grizzly bear',
+                        description: 'I think the thing I need most in my life is a giant furry pig with claws'
+                    }
+                ]
+            },
+            {
+                key: 2,
+                heading: 'doing',
+                items: []
+            },
+            {
+                key: 3,
+                heading: 'done',
+                items: []
+            }
+        ]
+    },
     kanbanReducer = (state = kanbanInitialState, action) => {
         switch(action.type) {
             case 'ADD_TEXT':
@@ -101,12 +125,6 @@ const
     itemButtonStyle = {
         width: '42px'
     },
-    /*
-        Arrow buttons to move columns and go up and down
-        on a column. Each column has a plus button to add
-        items. Each item has a minus button to remove.
-
-    */
     Item = ({title, text}) =>
         <div style={itemStyle}>
             <input
@@ -122,16 +140,21 @@ const
             <button type="button" style={itemButtonStyle}>▶</button>
         </div>,
     addButtonStyle = {width: '200px', marginBottom: '10px'},
-    Column = ({heading}) =>
+    Column = ({heading, items}) =>
         <div style={colStyle}>
             <h3 style={headerStyle}>{heading}</h3>
             <button type="button" style={addButtonStyle}>+</button>
-            <Item/>
+            {items.map(item => <Item key={item.key}/>)}
         </div>,
     kanbanRender = () =>
         ReactDOM.render(
             <div style={kanbanStyle}>
-                {kanbanStore.getState().columns.map(heading => <Column heading={heading}/>)}
+                {kanbanStore.getState().columns.map(
+                    column =>
+                        <Column
+                            key={column.key}
+                            heading={column.heading}
+                            items={column.items}/>)}
             </div>,
             document.getElementById('kanban'))
 

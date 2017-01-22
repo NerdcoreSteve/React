@@ -87,8 +87,27 @@ TODO
 Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
-var kanbanReducer = function kanbanReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { columns: ['to do', 'doing', 'done'] };
+var kanbanInitialState = {
+    columns: [{
+        key: 1,
+        heading: 'to do',
+        items: [{
+            key: 1,
+            title: 'Buy a grizzly bear',
+            description: 'I think the thing I need most in my life is a giant furry pig with claws'
+        }]
+    }, {
+        key: 2,
+        heading: 'doing',
+        items: []
+    }, {
+        key: 3,
+        heading: 'done',
+        items: []
+    }]
+},
+    kanbanReducer = function kanbanReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : kanbanInitialState;
     var action = arguments[1];
 
     switch (action.type) {
@@ -133,13 +152,7 @@ var kanbanReducer = function kanbanReducer() {
     itemButtonStyle = {
     width: '42px'
 },
-
-/*
-    Arrow buttons to move columns and go up and down
-    on a column. Each column has a plus button to add
-    items. Each item has a minus button to remove.
- */
-Item = function Item(_ref3) {
+    Item = function Item(_ref3) {
     var title = _ref3.title,
         text = _ref3.text;
     return React.createElement(
@@ -180,7 +193,8 @@ Item = function Item(_ref3) {
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
     Column = function Column(_ref4) {
-    var heading = _ref4.heading;
+    var heading = _ref4.heading,
+        items = _ref4.items;
     return React.createElement(
         'div',
         { style: colStyle },
@@ -194,15 +208,20 @@ Item = function Item(_ref3) {
             { type: 'button', style: addButtonStyle },
             '+'
         ),
-        React.createElement(Item, null)
+        items.map(function (item) {
+            return React.createElement(Item, { key: item.key });
+        })
     );
 },
     kanbanRender = function kanbanRender() {
     return ReactDOM.render(React.createElement(
         'div',
         { style: kanbanStyle },
-        kanbanStore.getState().columns.map(function (heading) {
-            return React.createElement(Column, { heading: heading });
+        kanbanStore.getState().columns.map(function (column) {
+            return React.createElement(Column, {
+                key: column.key,
+                heading: column.heading,
+                items: column.items });
         })
     ), document.getElementById('kanban'));
 };
