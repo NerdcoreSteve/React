@@ -83,20 +83,23 @@ const
             }
         ]
     },
+    changeItem = (changes, id, state) => ({
+        ...state,
+        columns: state.columns.map(
+            col => ({
+                ...col,
+                items: col.items.map(item =>
+                    item.key === id
+                        ? {...item, ...changes}
+                        : item)
+            }))
+    }),
     kanbanReducer = (state = kanbanInitialState, action) => {
         switch(action.type) {
+            case 'CHANGE_ITEM_TITLE':
+                return changeItem({title: action.title}, action.id, state)
             case 'CHANGE_ITEM_DESCRIPTION':
-                return {
-                    ...state,
-                    columns: state.columns.map(
-                        col => ({
-                            ...col,
-                            items: col.items.map(item =>
-                                item.key === action.id
-                                    ? {...item, description: action.description}
-                                    : item)
-                        }))
-                }
+                return changeItem({description: action.description}, action.id, state)
             default:
                 return state
         }
@@ -141,6 +144,8 @@ const
             <input
                 type="text"
                 value={title}
+                onChange = {({target:{value: title}}) =>
+                    kanbanStore.dispatch({type: 'CHANGE_ITEM_TITLE', id, title})}
                 cols="25"
                 style={{...itemInputStyle, width: '170px', borderStyle: 'solid'}}/>
             <textarea

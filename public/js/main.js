@@ -107,21 +107,26 @@ var kanbanInitialState = {
         items: []
     }]
 },
+    changeItem = function changeItem(changes, id, state) {
+    return _extends({}, state, {
+        columns: state.columns.map(function (col) {
+            return _extends({}, col, {
+                items: col.items.map(function (item) {
+                    return item.key === id ? _extends({}, item, changes) : item;
+                })
+            });
+        })
+    });
+},
     kanbanReducer = function kanbanReducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : kanbanInitialState;
     var action = arguments[1];
 
     switch (action.type) {
+        case 'CHANGE_ITEM_TITLE':
+            return changeItem({ title: action.title }, action.id, state);
         case 'CHANGE_ITEM_DESCRIPTION':
-            return _extends({}, state, {
-                columns: state.columns.map(function (col) {
-                    return _extends({}, col, {
-                        items: col.items.map(function (item) {
-                            return item.key === action.id ? _extends({}, item, { description: action.description }) : item;
-                        })
-                    });
-                })
-            });
+            return changeItem({ description: action.description }, action.id, state);
         default:
             return state;
     }
@@ -171,12 +176,16 @@ var kanbanInitialState = {
         React.createElement('input', {
             type: 'text',
             value: title,
+            onChange: function onChange(_ref4) {
+                var title = _ref4.target.value;
+                return kanbanStore.dispatch({ type: 'CHANGE_ITEM_TITLE', id: id, title: title });
+            },
             cols: '25',
             style: _extends({}, itemInputStyle, { width: '170px', borderStyle: 'solid' }) }),
         React.createElement('textarea', {
             value: description,
-            onChange: function onChange(_ref4) {
-                var description = _ref4.target.value;
+            onChange: function onChange(_ref5) {
+                var description = _ref5.target.value;
                 return kanbanStore.dispatch({ type: 'CHANGE_ITEM_DESCRIPTION', id: id, description: description });
             },
             rows: '4',
@@ -211,9 +220,9 @@ var kanbanInitialState = {
     );
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
-    Column = function Column(_ref5) {
-    var heading = _ref5.heading,
-        items = _ref5.items;
+    Column = function Column(_ref6) {
+    var heading = _ref6.heading,
+        items = _ref6.items;
     return React.createElement(
         'div',
         { style: colStyle },
@@ -227,10 +236,10 @@ var kanbanInitialState = {
             { type: 'button', style: addButtonStyle },
             '+'
         ),
-        items.map(function (_ref6) {
-            var key = _ref6.key,
-                title = _ref6.title,
-                description = _ref6.description;
+        items.map(function (_ref7) {
+            var key = _ref7.key,
+                title = _ref7.title,
+                description = _ref7.description;
             return React.createElement(Item, { key: key, id: key, title: title, description: description });
         })
     );
