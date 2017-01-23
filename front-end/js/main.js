@@ -58,6 +58,7 @@ This app doesn't quite work. I need something more complicated, But I'm not savi
 */
 const
     kanbanInitialState = {
+        nextKey: 4,
         columns: [
             {
                 key: 1,
@@ -125,13 +126,18 @@ const
     itemButtonStyle = {
         width: '42px'
     },
-    Item = ({title, text}) =>
+    Item = ({title, description}) =>
         <div style={itemStyle}>
             <input
                 type="text"
+                value={title}
                 cols="25"
                 style={{...itemInputStyle, width: '170px', borderStyle: 'solid'}}/>
-            <textarea rows="4" cols="25" style={{...itemInputStyle, resize: 'none'}}/>
+            <textarea
+                value={description}
+                rows="4"
+                cols="25"
+                style={{...itemInputStyle, resize: 'none'}}/>
             <button type="button" style={{width: '170px', fontSize: '90%'}}>remove</button>
             <br/>
             <button type="button" style={itemButtonStyle}>▲</button>
@@ -144,7 +150,8 @@ const
         <div style={colStyle}>
             <h3 style={headerStyle}>{heading}</h3>
             <button type="button" style={addButtonStyle}>+</button>
-            {items.map(item => <Item key={item.key}/>)}
+            {items.map(({key, title, description}) =>
+                <Item key={key} title={title} description={description}/>)}
         </div>,
     kanbanRender = () =>
         ReactDOM.render(

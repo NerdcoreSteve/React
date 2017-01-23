@@ -88,6 +88,7 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 var kanbanInitialState = {
+    nextKey: 4,
     columns: [{
         key: 1,
         heading: 'to do',
@@ -154,15 +155,20 @@ var kanbanInitialState = {
 },
     Item = function Item(_ref3) {
     var title = _ref3.title,
-        text = _ref3.text;
+        description = _ref3.description;
     return React.createElement(
         'div',
         { style: itemStyle },
         React.createElement('input', {
             type: 'text',
+            value: title,
             cols: '25',
             style: _extends({}, itemInputStyle, { width: '170px', borderStyle: 'solid' }) }),
-        React.createElement('textarea', { rows: '4', cols: '25', style: _extends({}, itemInputStyle, { resize: 'none' }) }),
+        React.createElement('textarea', {
+            value: description,
+            rows: '4',
+            cols: '25',
+            style: _extends({}, itemInputStyle, { resize: 'none' }) }),
         React.createElement(
             'button',
             { type: 'button', style: { width: '170px', fontSize: '90%' } },
@@ -208,8 +214,11 @@ var kanbanInitialState = {
             { type: 'button', style: addButtonStyle },
             '+'
         ),
-        items.map(function (item) {
-            return React.createElement(Item, { key: item.key });
+        items.map(function (_ref5) {
+            var key = _ref5.key,
+                title = _ref5.title,
+                description = _ref5.description;
+            return React.createElement(Item, { key: key, title: title, description: description });
         })
     );
 },
