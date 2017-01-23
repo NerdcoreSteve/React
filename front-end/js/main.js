@@ -85,8 +85,18 @@ const
     },
     kanbanReducer = (state = kanbanInitialState, action) => {
         switch(action.type) {
-            case 'ADD_TEXT':
-                return action.text
+            case 'CHANGE_ITEM_DESCRIPTION':
+                return {
+                    ...state,
+                    columns: state.columns.map(
+                        col => ({
+                            ...col,
+                            items: col.items.map(item =>
+                                item.key === action.id
+                                    ? {...item, description: action.description}
+                                    : item)
+                        }))
+                }
             default:
                 return state
         }
@@ -126,7 +136,7 @@ const
     itemButtonStyle = {
         width: '42px'
     },
-    Item = ({title, description}) =>
+    Item = ({id, title, description}) =>
         <div style={itemStyle}>
             <input
                 type="text"
@@ -135,6 +145,8 @@ const
                 style={{...itemInputStyle, width: '170px', borderStyle: 'solid'}}/>
             <textarea
                 value={description}
+                onChange = {({target:{value: description}}) =>
+                    kanbanStore.dispatch({type: 'CHANGE_ITEM_DESCRIPTION', id, description})}
                 rows="4"
                 cols="25"
                 style={{...itemInputStyle, resize: 'none'}}/>
@@ -151,7 +163,7 @@ const
             <h3 style={headerStyle}>{heading}</h3>
             <button type="button" style={addButtonStyle}>+</button>
             {items.map(({key, title, description}) =>
-                <Item key={key} title={title} description={description}/>)}
+                <Item key={key} id={key} title={title} description={description}/>)}
         </div>,
     kanbanRender = () =>
         ReactDOM.render(
