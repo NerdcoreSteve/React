@@ -63,13 +63,7 @@ const
             {
                 key: 1,
                 heading: 'to do',
-                items: [
-                    {
-                        key: 1,
-                        title: 'Buy a grizzly bear',
-                        description: 'I think the thing I need most in my life is a giant furry pig with claws'
-                    }
-                ]
+                items: []
             },
             {
                 key: 2,
@@ -100,6 +94,22 @@ const
                 return changeItem({title: action.title}, action.id, state)
             case 'CHANGE_ITEM_DESCRIPTION':
                 return changeItem({description: action.description}, action.id, state)
+            case 'ADD_ITEM':
+                return {
+                    ...state,
+                    nextKey: state.nextKey + 1,
+                    columns: state.columns.map(col =>
+                        col.key === action.id
+                            ? ({
+                                ...col,
+                                items: col.items.concat({
+                                    key: state.nextKey,
+                                    title: '',
+                                    description: ''
+                                })
+                            })
+                            : col)
+                }
             default:
                 return state
         }
@@ -163,10 +173,15 @@ const
             <button type="button" style={itemButtonStyle}>▶</button>
         </div>,
     addButtonStyle = {width: '200px', marginBottom: '10px'},
-    Column = ({heading, items}) =>
+    Column = ({id, heading, items}) =>
         <div style={colStyle}>
             <h3 style={headerStyle}>{heading}</h3>
-            <button type="button" style={addButtonStyle}>+</button>
+            <button
+                type="button"
+                onClick={() => kanbanStore.dispatch({type: 'ADD_ITEM', id})}
+                style={addButtonStyle}>
+                +
+            </button>
             {items.map(({key, title, description}) =>
                 <Item key={key} id={key} title={title} description={description}/>)}
         </div>,
@@ -177,6 +192,7 @@ const
                     column =>
                         <Column
                             key={column.key}
+                            id={column.key}
                             heading={column.heading}
                             items={column.items}/>)}
             </div>,

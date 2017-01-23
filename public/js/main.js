@@ -92,11 +92,7 @@ var kanbanInitialState = {
     columns: [{
         key: 1,
         heading: 'to do',
-        items: [{
-            key: 1,
-            title: 'Buy a grizzly bear',
-            description: 'I think the thing I need most in my life is a giant furry pig with claws'
-        }]
+        items: []
     }, {
         key: 2,
         heading: 'doing',
@@ -127,6 +123,19 @@ var kanbanInitialState = {
             return changeItem({ title: action.title }, action.id, state);
         case 'CHANGE_ITEM_DESCRIPTION':
             return changeItem({ description: action.description }, action.id, state);
+        case 'ADD_ITEM':
+            return _extends({}, state, {
+                nextKey: state.nextKey + 1,
+                columns: state.columns.map(function (col) {
+                    return col.key === action.id ? _extends({}, col, {
+                        items: col.items.concat({
+                            key: state.nextKey,
+                            title: '',
+                            description: ''
+                        })
+                    }) : col;
+                })
+            });
         default:
             return state;
     }
@@ -221,7 +230,8 @@ var kanbanInitialState = {
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
     Column = function Column(_ref6) {
-    var heading = _ref6.heading,
+    var id = _ref6.id,
+        heading = _ref6.heading,
         items = _ref6.items;
     return React.createElement(
         'div',
@@ -233,7 +243,12 @@ var kanbanInitialState = {
         ),
         React.createElement(
             'button',
-            { type: 'button', style: addButtonStyle },
+            {
+                type: 'button',
+                onClick: function onClick() {
+                    return kanbanStore.dispatch({ type: 'ADD_ITEM', id: id });
+                },
+                style: addButtonStyle },
             '+'
         ),
         items.map(function (_ref7) {
@@ -251,6 +266,7 @@ var kanbanInitialState = {
         kanbanStore.getState().columns.map(function (column) {
             return React.createElement(Column, {
                 key: column.key,
+                id: column.key,
                 heading: column.heading,
                 items: column.items });
         })
