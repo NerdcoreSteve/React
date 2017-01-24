@@ -88,7 +88,7 @@ Make a more complicated app
 This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
 */
 var kanbanInitialState = {
-    nextKey: 4,
+    nextKey: 1,
     columns: [{
         key: 1,
         heading: 'to do',
@@ -221,33 +221,29 @@ var kanbanInitialState = {
             'remove'
         ),
         React.createElement('br', null),
-        React.createElement(
-            'button',
-            { type: 'button', style: itemButtonStyle },
-            '\u25B2'
-        ),
-        React.createElement(
-            'button',
-            { type: 'button', style: itemButtonStyle },
-            '\u25BC'
-        ),
-        React.createElement(
-            'button',
-            { type: 'button', style: itemButtonStyle },
-            '\u25C0'
-        ),
-        React.createElement(
-            'button',
-            { type: 'button', style: itemButtonStyle },
-            '\u25B6'
-        )
+        [{ key: 1, char: '▲', direction: 'up' }, { key: 2, char: '▼', direction: 'down' }, { key: 3, char: '◀', direction: 'left' }, { key: 4, char: '▶', direction: 'right' }].map(function (_ref6) {
+            var key = _ref6.key,
+                char = _ref6.char,
+                direction = _ref6.direction;
+            return React.createElement(
+                'button',
+                {
+                    key: key,
+                    type: 'button',
+                    onClick: function onClick() {
+                        return console.log(direction, id);
+                    },
+                    style: itemButtonStyle },
+                char
+            );
+        })
     );
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
-    Column = function Column(_ref6) {
-    var id = _ref6.id,
-        heading = _ref6.heading,
-        items = _ref6.items;
+    Column = function Column(_ref7) {
+    var id = _ref7.id,
+        heading = _ref7.heading,
+        items = _ref7.items;
     return React.createElement(
         'div',
         { style: colStyle },
@@ -266,10 +262,10 @@ var kanbanInitialState = {
                 style: addButtonStyle },
             '+'
         ),
-        items.map(function (_ref7) {
-            var key = _ref7.key,
-                title = _ref7.title,
-                description = _ref7.description;
+        items.map(function (_ref8) {
+            var key = _ref8.key,
+                title = _ref8.title,
+                description = _ref8.description;
             return React.createElement(Item, { key: key, id: key, title: title, description: description });
         })
     );

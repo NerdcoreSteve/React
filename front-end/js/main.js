@@ -58,7 +58,7 @@ This app doesn't quite work. I need something more complicated, But I'm not savi
 */
 const
     kanbanInitialState = {
-        nextKey: 4,
+        nextKey: 1,
         columns: [
             {
                 key: 1,
@@ -181,10 +181,19 @@ const
                 remove
             </button>
             <br/>
-            <button type="button" style={itemButtonStyle}>▲</button>
-            <button type="button" style={itemButtonStyle}>▼</button>
-            <button type="button" style={itemButtonStyle}>◀</button>
-            <button type="button" style={itemButtonStyle}>▶</button>
+            {[
+                {key: 1, char: '▲', direction: 'up'},
+                {key: 2, char: '▼', direction: 'down'},
+                {key: 3, char: '◀', direction: 'left'},
+                {key: 4, char: '▶', direction: 'right'}
+            ].map(({key, char, direction}) =>
+                <button
+                    key={key}
+                    type="button"
+                    onClick={() => console.log(direction, id)}
+                    style={itemButtonStyle}>
+                    {char}
+                </button>)}
         </div>,
     addButtonStyle = {width: '200px', marginBottom: '10px'},
     Column = ({id, heading, items}) =>
