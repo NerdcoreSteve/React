@@ -136,6 +136,16 @@ var kanbanInitialState = {
                     }) : col;
                 })
             });
+        case 'REMOVE_ITEM':
+            return _extends({}, state, {
+                columns: state.columns.map(function (col) {
+                    return _extends({}, col, {
+                        items: col.items.filter(function (item) {
+                            return item.key !== action.id;
+                        })
+                    });
+                })
+            });
         default:
             return state;
     }
@@ -202,7 +212,12 @@ var kanbanInitialState = {
             style: _extends({}, itemInputStyle, { resize: 'none' }) }),
         React.createElement(
             'button',
-            { type: 'button', style: { width: '170px', fontSize: '90%' } },
+            {
+                type: 'button',
+                onClick: function onClick() {
+                    return kanbanStore.dispatch({ type: 'REMOVE_ITEM', id: id });
+                },
+                style: { width: '170px', fontSize: '90%' } },
             'remove'
         ),
         React.createElement('br', null),

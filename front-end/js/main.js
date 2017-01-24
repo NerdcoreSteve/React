@@ -110,6 +110,15 @@ const
                             })
                             : col)
                 }
+            case 'REMOVE_ITEM':
+                return {
+                    ...state,
+                    columns: state.columns.map(
+                        col => ({
+                            ...col,
+                            items: col.items.filter(item => item.key !== action.id)
+                        }))
+                }
             default:
                 return state
         }
@@ -165,7 +174,12 @@ const
                 rows="4"
                 cols="25"
                 style={{...itemInputStyle, resize: 'none'}}/>
-            <button type="button" style={{width: '170px', fontSize: '90%'}}>remove</button>
+            <button
+                type="button"
+                onClick={() => kanbanStore.dispatch({type: 'REMOVE_ITEM', id})}
+                style={{width: '170px', fontSize: '90%'}}>
+                remove
+            </button>
             <br/>
             <button type="button" style={itemButtonStyle}>▲</button>
             <button type="button" style={itemButtonStyle}>▼</button>
