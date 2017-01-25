@@ -162,7 +162,18 @@ var kanbanInitialState = {
                         })
                     });
                 case 'down':
-                    return state;
+                    return _extends({}, state, {
+                        columns: state.columns.map(function (col) {
+                            return _extends({}, col, {
+                                items: col.items.reduceRight(function (items, item) {
+                                    return item.key === action.id && col.items.length > 0 ? [R.head(items)].concat([item]).concat(R.tail(items)).filter(function (x) {
+                                        return x;
+                                    }) //head is sometimes undefined
+                                    : [item].concat(items);
+                                }, [])
+                            });
+                        })
+                    });
                 case 'left':
                     return state;
                 case 'right':

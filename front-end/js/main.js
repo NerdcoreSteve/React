@@ -140,7 +140,22 @@ const
                                 }))
                         }
                     case 'down':
-                        return state
+                        return {
+                            ...state,
+                            columns: state.columns.map(
+                                col => ({
+                                    ...col,
+                                    items: col.items.reduceRight(
+                                        (items, item) =>
+                                            item.key === action.id && col.items.length > 0
+                                                ? [R.head(items)]
+                                                    .concat([item])
+                                                    .concat(R.tail(items))
+                                                    .filter(x => x) //head is sometimes undefined
+                                                : [item].concat(items),
+                                        [])
+                                }))
+                        }
                     case 'left':
                         return state
                     case 'right':
