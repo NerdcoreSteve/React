@@ -153,7 +153,7 @@ var kanbanInitialState = {
                         columns: state.columns.map(function (col) {
                             return _extends({}, col, {
                                 items: col.items.reduce(function (items, item) {
-                                    return item.key === action.id ? R.dropLast(1, items).concat([item]).concat(R.last(items)).filter(function (x) {
+                                    return item.key === action.id ? R.dropLast(1, items).concat(item).concat(R.last(items)).filter(function (x) {
                                         return x;
                                     }) //sometimes last is undefined
                                     : items.concat([item]);
@@ -166,7 +166,7 @@ var kanbanInitialState = {
                         columns: state.columns.map(function (col) {
                             return _extends({}, col, {
                                 items: col.items.reduceRight(function (items, item) {
-                                    return item.key === action.id && col.items.length > 0 ? [R.head(items)].concat([item]).concat(R.tail(items)).filter(function (x) {
+                                    return item.key === action.id && col.items.length > 0 ? [R.head(items)].concat(item).concat(R.tail(items)).filter(function (x) {
                                         return x;
                                     }) //head is sometimes undefined
                                     : [item].concat(items);

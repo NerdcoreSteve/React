@@ -132,7 +132,7 @@ const
                                         (items, item) =>
                                             item.key === action.id
                                                 ? R.dropLast(1, items)
-                                                    .concat([item])
+                                                    .concat(item)
                                                     .concat(R.last(items))
                                                     .filter(x => x) //sometimes last is undefined
                                                 : items.concat([item]),
@@ -149,7 +149,7 @@ const
                                         (items, item) =>
                                             item.key === action.id && col.items.length > 0
                                                 ? [R.head(items)]
-                                                    .concat([item])
+                                                    .concat(item)
                                                     .concat(R.tail(items))
                                                     .filter(x => x) //head is sometimes undefined
                                                 : [item].concat(items),
