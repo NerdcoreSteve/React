@@ -128,11 +128,11 @@ var kanbanInitialState = {
                 nextKey: state.nextKey + 1,
                 columns: state.columns.map(function (col) {
                     return col.key === action.id ? _extends({}, col, {
-                        items: col.items.concat({
+                        items: [{
                             key: state.nextKey,
                             title: '',
                             description: ''
-                        })
+                        }].concat(col.items)
                     }) : col;
                 })
             });
@@ -146,6 +146,30 @@ var kanbanInitialState = {
                     });
                 })
             });
+        case 'MOVE_ITEM':
+            switch (action.direction) {
+                case 'up':
+                    return _extends({}, state, {
+                        columns: state.columns.map(function (col) {
+                            return _extends({}, col, {
+                                items: col.items.reduce(function (items, item) {
+                                    return item.key === action.id ? R.dropLast(1, items).concat([item]).concat(R.last(items)).filter(function (x) {
+                                        return x;
+                                    }) //sometimes last is undefined
+                                    : items.concat([item]);
+                                }, [])
+                            });
+                        })
+                    });
+                case 'down':
+                    return state;
+                case 'left':
+                    return state;
+                case 'right':
+                    return state;
+                default:
+                    return state;
+            }
         default:
             return state;
     }
@@ -231,7 +255,7 @@ var kanbanInitialState = {
                     key: key,
                     type: 'button',
                     onClick: function onClick() {
-                        return console.log(direction, id);
+                        return kanbanStore.dispatch({ type: 'MOVE_ITEM', direction: direction, id: id });
                     },
                     style: itemButtonStyle },
                 char

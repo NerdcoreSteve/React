@@ -102,11 +102,12 @@ const
                         col.key === action.id
                             ? ({
                                 ...col,
-                                items: col.items.concat({
+                                items: [{
                                     key: state.nextKey,
                                     title: '',
                                     description: ''
-                                })
+                                }]
+                                    .concat(col.items)
                             })
                             : col)
                 }
@@ -118,6 +119,34 @@ const
                             ...col,
                             items: col.items.filter(item => item.key !== action.id)
                         }))
+                }
+            case 'MOVE_ITEM':
+                switch(action.direction) {
+                    case 'up':
+                        return {
+                            ...state,
+                            columns: state.columns.map(
+                                col => ({
+                                    ...col,
+                                    items: col.items.reduce(
+                                        (items, item) =>
+                                            item.key === action.id
+                                                ? R.dropLast(1, items)
+                                                    .concat([item])
+                                                    .concat(R.last(items))
+                                                    .filter(x => x) //sometimes last is undefined
+                                                : items.concat([item]),
+                                        [])
+                                }))
+                        }
+                    case 'down':
+                        return state
+                    case 'left':
+                        return state
+                    case 'right':
+                        return state
+                    default:
+                        return state
                 }
             default:
                 return state
@@ -190,7 +219,7 @@ const
                 <button
                     key={key}
                     type="button"
-                    onClick={() => console.log(direction, id)}
+                    onClick={() => kanbanStore.dispatch({type: 'MOVE_ITEM', direction, id})}
                     style={itemButtonStyle}>
                     {char}
                 </button>)}
