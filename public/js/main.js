@@ -84,8 +84,8 @@ render();
 
 /*
 TODO
-Make a more complicated app
-This app doesn't quite work. I need something more complicated, But I'm not saving notes to a server so it's just a list of components, each just a text field and text area. Nothing more is saved or displayed.
+dry this up, adding and removing components and moving components to the right and left has a
+lot of duplication
 */
 var kanbanInitialState = {
     nextKey: 1,
@@ -113,6 +113,15 @@ var kanbanInitialState = {
             });
         })
     });
+},
+    findItem = function findItem(id) {
+    return R.find(R.propEq('key', id));
+},
+    getItemIndex = function getItemIndex(id, columns) {
+    return R.pipe(R.map(R.prop('items')), R.findIndex(findItem(id)))(columns);
+},
+    getItem = function getItem(colIndex, id, columns) {
+    return R.pipe(R.prop(colIndex), R.prop('items'), findItem(id))(columns);
 },
     kanbanReducer = function kanbanReducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : kanbanInitialState;
@@ -175,15 +184,23 @@ var kanbanInitialState = {
                         })
                     });
                 case 'left':
-                    var findItem = R.find(R.propEq('key', action.id)),
-                        colIndex = R.pipe(R.map(R.prop('items')), R.findIndex(findItem))(state.columns),
-                        item = R.pipe(R.prop(colIndex), R.prop('items'), findItem)(state.columns);
+                    return function () {
+                        var colIndex = getItemIndex(action.id, state.columns),
+                            item = getItem(colIndex, action.id, state.columns);
 
-                    return _extends({}, state, {
-                        columns: colIndex > 0 ? R.pipe(R.map(R.over(R.lensProp('items'), R.reject(R.propEq('key', action.id)))), R.adjust(R.over(R.lensProp('items'), R.append(item)), colIndex - 1))(state.columns) : state.columns
-                    });
+                        return _extends({}, state, {
+                            columns: colIndex > 0 ? R.pipe(R.map(R.over(R.lensProp('items'), R.reject(R.propEq('key', action.id)))), R.adjust(R.over(R.lensProp('items'), R.append(item)), colIndex - 1))(state.columns) : state.columns
+                        });
+                    }();
                 case 'right':
-                    return state;
+                    return function () {
+                        var colIndex = getItemIndex(action.id, state.columns),
+                            item = getItem(colIndex, action.id, state.columns);
+
+                        return _extends({}, state, {
+                            columns: colIndex < state.columns.length - 1 ? R.pipe(R.map(R.over(R.lensProp('items'), R.reject(R.propEq('key', action.id)))), R.adjust(R.over(R.lensProp('items'), R.append(item)), colIndex + 1))(state.columns) : state.columns
+                        });
+                    }();
                 default:
                     return state;
             }
