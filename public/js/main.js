@@ -175,7 +175,13 @@ var kanbanInitialState = {
                         })
                     });
                 case 'left':
-                    return state;
+                    var findItem = R.find(R.propEq('key', action.id)),
+                        colIndex = R.pipe(R.map(R.prop('items')), R.findIndex(findItem))(state.columns),
+                        item = R.pipe(R.prop(colIndex), R.prop('items'), findItem)(state.columns);
+
+                    return _extends({}, state, {
+                        columns: colIndex > 0 ? R.pipe(R.map(R.over(R.lensProp('items'), R.reject(R.propEq('key', action.id)))), R.adjust(R.over(R.lensProp('items'), R.append(item)), colIndex - 1))(state.columns) : state.columns
+                    });
                 case 'right':
                     return state;
                 default:
