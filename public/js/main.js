@@ -45,6 +45,39 @@ ReactDOM.render(React.createElement(
     React.createElement(AnotherComponent, { argument: 'bananas' })
 ), document.getElementById('simple'));
 
+//map example
+var Row = function Row(_ref2) {
+    var text = _ref2.text;
+    return React.createElement(
+        'tr',
+        null,
+        React.createElement(
+            'td',
+            null,
+            text
+        )
+    );
+},
+    Table = function Table(_ref3) {
+    var list = _ref3.list;
+    return React.createElement(
+        'table',
+        null,
+        React.createElement(
+            'tbody',
+            null,
+            list.map(function (text, i) {
+                return React.createElement(Row, { key: i, text: text });
+            })
+        )
+    );
+};
+
+ReactDOM.render(React.createElement(Table, { list: ['stuff', 'and', 'things'] }), document.getElementById('map'));
+
+//style example
+ReactDOM.render(React.createElement(Table, { list: 'each word will be a row'.split(' ') }), document.getElementById('stylemap'));
+
 //Simple react redux example
 
 var _require = require('redux'),
@@ -72,8 +105,8 @@ var _require = require('redux'),
         ),
         React.createElement('input', {
             type: 'text',
-            onChange: function onChange(_ref2) {
-                var text = _ref2.target.value;
+            onChange: function onChange(_ref4) {
+                var text = _ref4.target.value;
                 return store.dispatch({ type: 'ADD_TEXT', text: text });
             } })
     ), document.getElementById('textfield'));
@@ -243,26 +276,26 @@ var kanbanInitialState = {
     itemButtonStyle = {
     width: '42px'
 },
-    Item = function Item(_ref3) {
-    var id = _ref3.id,
-        title = _ref3.title,
-        description = _ref3.description;
+    Item = function Item(_ref5) {
+    var id = _ref5.id,
+        title = _ref5.title,
+        description = _ref5.description;
     return React.createElement(
         'div',
         { style: itemStyle },
         React.createElement('input', {
             type: 'text',
             value: title,
-            onChange: function onChange(_ref4) {
-                var title = _ref4.target.value;
+            onChange: function onChange(_ref6) {
+                var title = _ref6.target.value;
                 return kanbanStore.dispatch({ type: 'CHANGE_ITEM_TITLE', id: id, title: title });
             },
             cols: '25',
             style: _extends({}, itemInputStyle, { width: '170px', borderStyle: 'solid' }) }),
         React.createElement('textarea', {
             value: description,
-            onChange: function onChange(_ref5) {
-                var description = _ref5.target.value;
+            onChange: function onChange(_ref7) {
+                var description = _ref7.target.value;
                 return kanbanStore.dispatch({ type: 'CHANGE_ITEM_DESCRIPTION', id: id, description: description });
             },
             rows: '4',
@@ -279,10 +312,10 @@ var kanbanInitialState = {
             'remove'
         ),
         React.createElement('br', null),
-        [{ key: 1, char: '▲', direction: 'up' }, { key: 2, char: '▼', direction: 'down' }, { key: 3, char: '◀', direction: 'left' }, { key: 4, char: '▶', direction: 'right' }].map(function (_ref6) {
-            var key = _ref6.key,
-                char = _ref6.char,
-                direction = _ref6.direction;
+        [{ key: 1, char: '▲', direction: 'up' }, { key: 2, char: '▼', direction: 'down' }, { key: 3, char: '◀', direction: 'left' }, { key: 4, char: '▶', direction: 'right' }].map(function (_ref8) {
+            var key = _ref8.key,
+                char = _ref8.char,
+                direction = _ref8.direction;
             return React.createElement(
                 'button',
                 {
@@ -298,10 +331,10 @@ var kanbanInitialState = {
     );
 },
     addButtonStyle = { width: '200px', marginBottom: '10px' },
-    Column = function Column(_ref7) {
-    var id = _ref7.id,
-        heading = _ref7.heading,
-        items = _ref7.items;
+    Column = function Column(_ref9) {
+    var id = _ref9.id,
+        heading = _ref9.heading,
+        items = _ref9.items;
     return React.createElement(
         'div',
         { style: colStyle },
@@ -320,10 +353,10 @@ var kanbanInitialState = {
                 style: addButtonStyle },
             '+'
         ),
-        items.map(function (_ref8) {
-            var key = _ref8.key,
-                title = _ref8.title,
-                description = _ref8.description;
+        items.map(function (_ref10) {
+            var key = _ref10.key,
+                title = _ref10.title,
+                description = _ref10.description;
             return React.createElement(Item, { key: key, id: key, title: title, description: description });
         })
     );

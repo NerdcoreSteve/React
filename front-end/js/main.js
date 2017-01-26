@@ -26,6 +26,25 @@ ReactDOM.render(
     </div>,
     document.getElementById('simple'))
 
+//map example
+const
+    Row = ({text}) => <tr><td>{text}</td></tr>,
+    Table = ({list}) =>
+        <table>
+            <tbody>
+                {list.map((text, i) => <Row key={i} text={text}/>)}
+            </tbody>
+        </table>
+
+ReactDOM.render(
+    <Table list={['stuff', 'and', 'things']}/>,
+    document.getElementById('map'))
+
+//style example
+ReactDOM.render(
+    <Table list={'each word will be a row'.split(' ')}/>,
+    document.getElementById('stylemap'))
+
 //Simple react redux example
 const
     {createStore} = require('redux'),
