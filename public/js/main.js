@@ -47,27 +47,31 @@ ReactDOM.render(React.createElement(
 
 //map example
 var Row = function Row(_ref2) {
-    var text = _ref2.text;
+    var text = _ref2.text,
+        _ref2$style = _ref2.style,
+        style = _ref2$style === undefined ? {} : _ref2$style;
     return React.createElement(
         'tr',
         null,
         React.createElement(
             'td',
-            null,
+            { style: style },
             text
         )
     );
 },
     Table = function Table(_ref3) {
-    var list = _ref3.list;
+    var list = _ref3.list,
+        _ref3$style = _ref3.style,
+        style = _ref3$style === undefined ? {} : _ref3$style;
     return React.createElement(
         'table',
-        null,
+        { style: style },
         React.createElement(
             'tbody',
             null,
             list.map(function (text, i) {
-                return React.createElement(Row, { key: i, text: text });
+                return React.createElement(Row, { style: style, key: i, text: text });
             })
         )
     );
@@ -76,7 +80,8 @@ var Row = function Row(_ref2) {
 ReactDOM.render(React.createElement(Table, { list: ['stuff', 'and', 'things'] }), document.getElementById('map'));
 
 //style example
-ReactDOM.render(React.createElement(Table, { list: 'each word will be a row'.split(' ') }), document.getElementById('stylemap'));
+var tableStyle = { border: '1px solid black' };
+ReactDOM.render(React.createElement(Table, { style: tableStyle, list: 'each word will be a row'.split(' ') }), document.getElementById('stylemap'));
 
 //Simple react redux example
 

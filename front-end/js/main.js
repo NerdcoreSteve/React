@@ -28,11 +28,11 @@ ReactDOM.render(
 
 //map example
 const
-    Row = ({text}) => <tr><td>{text}</td></tr>,
-    Table = ({list}) =>
-        <table>
+    Row = ({text, style={}}) => <tr><td style={style}>{text}</td></tr>,
+    Table = ({list, style={}}) =>
+        <table style={style}>
             <tbody>
-                {list.map((text, i) => <Row key={i} text={text}/>)}
+                {list.map((text, i) => <Row style={style} key={i} text={text}/>)}
             </tbody>
         </table>
 
@@ -41,8 +41,9 @@ ReactDOM.render(
     document.getElementById('map'))
 
 //style example
+const tableStyle = {border: '1px solid black'}
 ReactDOM.render(
-    <Table list={'each word will be a row'.split(' ')}/>,
+    <Table style={tableStyle} list={'each word will be a row'.split(' ')}/>,
     document.getElementById('stylemap'))
 
 //Simple react redux example
@@ -70,11 +71,6 @@ const
 store.subscribe(render)
 render()
 
-/*
-TODO
-dry this up, adding and removing components and moving components to the right and left has a
-lot of duplication
-*/
 const
     kanbanInitialState = {
         nextKey: 1,
