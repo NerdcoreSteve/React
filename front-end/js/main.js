@@ -2,14 +2,13 @@ require('whatwg-fetch')
 
 const
     R = require('ramda'),
-    Rx = require('rx'),
     tap = x => { console.log(x); return x },
     React = require('react'),
     ReactDOM = require('react-dom')
 
 //Simple hello world
 ReactDOM.render(
-        <p>Yo yo whattup?</p>,
+    <p>Yo yo whattup?</p>,
     document.getElementById('hello'))
 
 //stateless functional components
